@@ -7,7 +7,8 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'python:2-alpine'
+                    image 'python:3-alpine'
+                    label 'custom-docker-label'
                 }
             }
             steps {
@@ -18,6 +19,7 @@ pipeline {
             agent {
                 docker {
                     image 'qnib/pytest'
+                    label 'custom-docker-label'
                 }
             }
             steps {
@@ -32,15 +34,13 @@ pipeline {
         stage('Deliver') {
             agent {
                 docker {
-                    image 'python:2-alpine'
+                    image 'python:3-alpine'
+                    label 'custom-docker-label'
                 }
             }
             steps {
                 // Upgrade pip with user installation
                 sh '/usr/local/bin/python -m pip install --user --upgrade pip'
-
-                // Add the user bin directory to the PATH
-                sh 'export PATH=~/.local/bin:$PATH'
 
                 // Install PyInstaller with user installation
                 sh '/usr/local/bin/python -m pip install --user pyinstaller'
