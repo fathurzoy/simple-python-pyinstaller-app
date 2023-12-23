@@ -36,8 +36,14 @@ pipeline {
                 }
             }
             steps {
-                sh '/usr/local/bin/python -m pip install --upgrade pip'
-                sh '/usr/local/bin/python -m pip install pyinstaller'
+                // Upgrade pip with user installation
+                sh '/usr/local/bin/python -m pip install --user --upgrade pip'
+
+                // Add the user bin directory to the PATH
+                sh 'export PATH=~/.local/bin:$PATH'
+
+                // Install PyInstaller with user installation
+                sh '/usr/local/bin/python -m pip install --user pyinstaller'
                 sh 'pyinstaller --onefile sources/add2vals.py'
             }
             post {
